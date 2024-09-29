@@ -139,18 +139,18 @@ button.navbar-toggler{
 
 .btn-signup,
 .btn-edit {
-    background-color: #188181;
+    background-color: #ff8000;
     color: #fff;
 }
 
 .btn-signup:hover,
 .btn-signup:active {
     background-color: #fff;
-    color: #23BBBB;
+    color: #ff8000;
 }
 
 .link {
-    color: #23BBBB;
+    color: #ff8000;
     text-decoration: none;
 }
 
