@@ -103,6 +103,8 @@ def delete_post(request, slug):
         messages.add_message(request, messages.SUCCESS, 'Post deleted successfully!')
         return HttpResponseRedirect(reverse('home'))  
 
+    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
     return render(request, 'news/delete_post.html', {'post': post})
 
 def comment_edit(request, slug, comment_id):

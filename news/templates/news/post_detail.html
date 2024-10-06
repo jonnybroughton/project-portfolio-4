@@ -133,7 +133,10 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a id="deletePostConfirm" href="{% url 'delete_post' post.slug %}" class="btn btn-danger">Delete</a>
+        <form action="{% url 'delete_post' post.slug %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
       </div>
     </div>
   </div>
