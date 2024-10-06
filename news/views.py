@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from .models import Post, Comment
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 
 
 # Create your views here.
@@ -55,6 +56,23 @@ def post_detail(request, slug):
             "comment_form": comment_form,
         }
     )
+
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)  
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user  
+            post.save()  
+            messages.add_message(request, messages.SUCCESS, 'Post created successfully and awaiting approval.')
+            return HttpResponseRedirect(reverse('home'))  
+    else:
+        form = PostForm()
+
+    return render(request, 'news/create_post.html', {'form': form})
+
 
 def comment_edit(request, slug, comment_id):
     """

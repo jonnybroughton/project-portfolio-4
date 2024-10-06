@@ -149,6 +149,20 @@ button.navbar-toggler{
     color: #FF8800;
 }
 
+.btn-primary{ 
+    color:#fff;
+    background-color: #FF8800;
+    border-color: #FF8800;
+}
+
+
+.btn-primary:hover,
+.btn-primary:active { 
+    color:#fff;
+    background-color: #FF8800;
+    border-color: #FF8800;
+}
+
 .link {
     color: #FF8800;
     text-decoration: none;
@@ -195,3 +209,6 @@ button.navbar-toggler{
     color:#fff;
 }
 
+.create-post{
+    padding-bottom: 20px;
+}
