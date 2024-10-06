@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
 
-
 # Create your views here.
 class PostList(generic.ListView):
     queryset = Post.objects.all().order_by("-created_on").filter(status=1)
@@ -73,6 +72,38 @@ def create_post(request):
 
     return render(request, 'news/create_post.html', {'form': form})
 
+    
+@login_required
+def edit_post(request, slug):
+    """
+    View to edit a post
+    """
+    post = get_object_or_404(Post, slug=slug)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid() and post.author == request.user:
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Post updated successfully!')
+            return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, 'news/edit_post.html', {'form': form, 'post': post})
+
+@login_required
+def delete_post(request, slug):
+    """
+    View to delete a post
+    """
+    post = get_object_or_404(Post, slug=slug)
+
+    if request.method == 'POST' and post.author == request.user:
+        post.delete()
+        messages.add_message(request, messages.SUCCESS, 'Post deleted successfully!')
+        return HttpResponseRedirect(reverse('home'))  
+
+    return render(request, 'news/delete_post.html', {'post': post})
 
 def comment_edit(request, slug, comment_id):
     """

@@ -212,3 +212,33 @@ button.navbar-toggler{
 .create-post{
     padding-bottom: 20px;
 }
+
+.edit-delete{
+    padding-left: 20px;
+}
+
+
+.btn-success {
+    background-color: #FF8800;
+    color: #fff;
+    border-color: #FF8800;
+    margin-bottom: 20px;
+}
+
+.btn-success:active,
+.btn-success:focus,
+.btn-success:hover {
+    background-color: #FF8800;
+    color: #fff;
+    border-color: #FF8800;
+    margin-bottom: 20px;
+}
+
+.btn-success:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.cancel-edit{
+    margin-bottom: 20px;
+}
