@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment
+from .models import Post, Comment, Vote
 from .forms import CommentForm, PostForm
+
 
 # Create your views here.
 class PostList(generic.ListView):
@@ -43,7 +44,6 @@ def post_detail(request, slug):
             )
 
     comment_form = CommentForm()
-
 
     return render(
         request,
@@ -105,14 +105,11 @@ def delete_post(request, slug):
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
-    return render(request, 'news/delete_post.html', {'post': post})
-
 def comment_edit(request, slug, comment_id):
     """
     view to edit comments
     """
     if request.method == "POST":
-
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
         comment = get_object_or_404(Comment, pk=comment_id)
@@ -145,3 +142,81 @@ def comment_delete(request, slug, comment_id):
         messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+@login_required
+def vote_post(request, slug):
+    # To run through this code when the user submits a vote
+    if request.method == 'POST':
+
+        # gets the user
+        user = request.user
+
+        # gets the current post
+        post = get_object_or_404(Post, slug=slug)
+
+        # filters the votes for the current post
+        vote = post.votes.filter(user=user).first()
+
+        if vote is not None:
+            # if the vote already exists delete the vote
+            vote.delete()
+        else:
+            # apply the submitted data to the Vote model
+            vote = Vote()
+            vote.user = request.user
+            vote.post = post
+            vote.value = request.POST.get('vote_id')
+            vote.save()
+            print('VOTE: ', vote)
+
+        # return to the post_detail page
+        return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+# @login_required
+# def vote_post(request, slug, vote_value):
+#     post = get_object_or_404(Post, slug=slug) # Retrieve the post by slug
+#     vote = get_object_or_404(Vote, value=vote_value)
+
+#     if request.method == 'POST':
+#         try:
+
+#             # vote_value = int(request.POST.get('vote_value', 0)) #Get the vote value from the request
+#             print('VOTE: ', vote)
+#             print(f"Vote value received: {vote_value}, {type(vote_value)}")
+
+#             if vote_value not in [1, -1]:  # check if the vote value is valid
+#                 return JsonResponse({'success': False, 'message': 'Invalid vote value.'}, status=400)
+
+#             # try to get or create a vote object for the user and the post
+#             vote, created = Vote.objects.get_or_create(user=request.user, post=post)
+#             print(f"Vote created: {created}. Current Vote Value: {vote.value}")
+
+#             if not created:
+#                 print(f"User has already voted. Current Vote Value: {vote.value}, New Vote Value: {vote_value}")  
+#                 if vote.value == vote_value:
+#                     #if the vote value is the same as the current vote then remove it
+#                     print("Vote value is the same as the current vote. Removing vote.")
+#                     vote.delete()
+#                     return JsonResponse({'success': True, 'message': 'Vote removed', 'total_votes': post.total_votes()})
+#                 else:
+#                     #if the vote is different then update the vote value
+#                     print("Vote value is different. Updating vote value.")
+#                     vote.value = vote_value
+#                     vote.save() #save the vote value
+#                     return JsonResponse({'success': True, 'message': 'Vote updated', 'total_votes': post.total_votes()})
+#             else:
+#                 #if the vote value doesnt exist then create a new vote
+#                 print("Recording new vote.")
+#                 vote.value = vote_value #assign the vote value
+#                 vote.save() #save the new vote
+#                 return JsonResponse({'success': True, 'message': 'Vote recorded', 'total_votes': post.total_votes()})
+
+#         except ValueError as ve:
+#             print(f"ValueError: {str(ve)}")  
+#             return JsonResponse({'success': False, 'message': 'Invalid vote value.'}, status=400)
+#         except Exception as e:
+#             print(f"Error processing vote: {str(e)}")
+#             return JsonResponse({'success': False, 'message': 'There was an error processing your vote.'}, status=400)
+
+#     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
+

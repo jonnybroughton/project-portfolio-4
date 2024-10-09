@@ -13,7 +13,7 @@
         <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
         {% if user.is_authenticated and post.author == user %}
         <div class="mt-3 edit-delete">
-          <a href="{% url 'edit_post' post.slug %}" class="btn btn-warning">Edit Post</a>
+          <a href="{% url 'edit_post' post.slug %}" class="btn btn-warning edit-post-button">Edit Post</a>
           <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal">Delete Post</button>
         </div>
         {% endif %}
@@ -38,6 +38,19 @@
           {{ post.content | safe }}
         </p>
       </div>
+    </div>
+  </div>
+  <!-- Displaying count of votes -->
+  <div class="row">
+    <div class="col-12 text-center mb-3">
+
+      <!-- Form to submit the user's vote -->
+      <form class="d-inline" action="{% url 'vote_post' post.slug %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" name="vote_id" value=1 class="btn btn-success upvote-btn" data-slug="{{ post.slug }}">&uarr; Upvote</button>
+        <button type="submit" name="vote_id" value=-1 class="btn btn-danger downvote-btn" data-slug="{{ post.slug }}">Downvote &darr;</button>
+      </form>
+      <div id="total-votes" class="mt-2">Total Votes: {{ post.total_votes }}</div>
     </div>
   </div>
   <!-- Displaying count of comments -->
