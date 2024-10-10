@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ user_profile.user.username }}'s Profile</h2>
+    <div class="row">
+        <div class="col-md-4">
+            {% if user_profile.profile_picture %}
+                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid">
+            {% else %}
+                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="img-fluid">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h3>About Me:</h3>
+            <p><strong>Favorite Car:</strong> {{ user_profile.favorite_car }}</p>
+            <p><strong>Current Car:</strong> {{ user_profile.current_car }}</p>
+            <p><strong>Posts Created:</strong> {{ user_profile.post_count }}</p>
+            <p><strong>Comments Left:</strong> {{ user_profile.comment_count }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

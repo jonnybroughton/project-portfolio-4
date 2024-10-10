@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 from cloudinary.models import CloudinaryField
 
 # Create your models here.
@@ -62,3 +63,14 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment {self.body} by {self.author}"
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    favorite_car = models.CharField(max_length=100)
+    current_car = models.CharField(max_length=100)
+    post_count = models.PositiveIntegerField(default=0)  
+    comment_count = models.PositiveIntegerField(default=0)
+    profile_picture = CloudinaryField('image', null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username

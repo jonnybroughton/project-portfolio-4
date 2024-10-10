@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Vote
-from .forms import CommentForm, PostForm
+from .models import Post, Comment, Vote, UserProfile
+from .forms import CommentForm, PostForm, UserProfileForm
+
 
 
 # Create your views here.
@@ -38,6 +39,9 @@ def post_detail(request, slug):
             comment.author = request.user
             comment.post = post
             comment.save()
+            user_profile = UserProfile.objects.get(user=request.user)
+            user_profile.comment_count += 1
+            user_profile.save()
             messages.add_message(
                 request, messages.SUCCESS,
                 'Comment submitted and awaiting approval'
@@ -64,7 +68,10 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user  
-            post.save()  
+            post.save()
+            user_profile = UserProfile.objects.get(user=request.user)
+            user_profile.post_count += 1
+            user_profile.save()
             messages.add_message(request, messages.SUCCESS, 'Post created successfully and awaiting approval.')
             return HttpResponseRedirect(reverse('home'))  
     else:
@@ -100,8 +107,13 @@ def delete_post(request, slug):
 
     if request.method == 'POST' and post.author == request.user:
         post.delete()
+        user_profile = UserProfile.objects.get(user=post.author)
+        if user_profile.post_count > 0:
+            user_profile.post_count -= 1
+            user_profile.save()
         messages.add_message(request, messages.SUCCESS, 'Post deleted successfully!')
         return HttpResponseRedirect(reverse('home'))  
+    
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
@@ -137,6 +149,10 @@ def comment_delete(request, slug, comment_id):
 
     if comment.author == request.user:
         comment.delete()
+        user_profile = UserProfile.objects.get(user=comment.author)
+        if user_profile.comment_count > 0:
+            user_profile.comment_count -= 1
+            user_profile.save()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
         messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
@@ -172,51 +188,13 @@ def vote_post(request, slug):
         # return to the post_detail page
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
-# @login_required
-# def vote_post(request, slug, vote_value):
-#     post = get_object_or_404(Post, slug=slug) # Retrieve the post by slug
-#     vote = get_object_or_404(Vote, value=vote_value)
+@login_required
+def profile_view(request):
+    user = request.user
+    user_profile = get_object_or_404(UserProfile, user=user)
 
-#     if request.method == 'POST':
-#         try:
-
-#             # vote_value = int(request.POST.get('vote_value', 0)) #Get the vote value from the request
-#             print('VOTE: ', vote)
-#             print(f"Vote value received: {vote_value}, {type(vote_value)}")
-
-#             if vote_value not in [1, -1]:  # check if the vote value is valid
-#                 return JsonResponse({'success': False, 'message': 'Invalid vote value.'}, status=400)
-
-#             # try to get or create a vote object for the user and the post
-#             vote, created = Vote.objects.get_or_create(user=request.user, post=post)
-#             print(f"Vote created: {created}. Current Vote Value: {vote.value}")
-
-#             if not created:
-#                 print(f"User has already voted. Current Vote Value: {vote.value}, New Vote Value: {vote_value}")  
-#                 if vote.value == vote_value:
-#                     #if the vote value is the same as the current vote then remove it
-#                     print("Vote value is the same as the current vote. Removing vote.")
-#                     vote.delete()
-#                     return JsonResponse({'success': True, 'message': 'Vote removed', 'total_votes': post.total_votes()})
-#                 else:
-#                     #if the vote is different then update the vote value
-#                     print("Vote value is different. Updating vote value.")
-#                     vote.value = vote_value
-#                     vote.save() #save the vote value
-#                     return JsonResponse({'success': True, 'message': 'Vote updated', 'total_votes': post.total_votes()})
-#             else:
-#                 #if the vote value doesnt exist then create a new vote
-#                 print("Recording new vote.")
-#                 vote.value = vote_value #assign the vote value
-#                 vote.save() #save the new vote
-#                 return JsonResponse({'success': True, 'message': 'Vote recorded', 'total_votes': post.total_votes()})
-
-#         except ValueError as ve:
-#             print(f"ValueError: {str(ve)}")  
-#             return JsonResponse({'success': False, 'message': 'Invalid vote value.'}, status=400)
-#         except Exception as e:
-#             print(f"Error processing vote: {str(e)}")
-#             return JsonResponse({'success': False, 'message': 'There was an error processing your vote.'}, status=400)
-
-#     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
-
+    context = {
+        'user': user,
+        'user_profile': user_profile,
+    }
+    return render(request, 'news/profile.html', context)

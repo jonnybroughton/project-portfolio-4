@@ -1,4 +1,4 @@
-from .models import Comment, Post  
+from .models import Comment, Post, UserProfile
 from django import forms
 from cloudinary.forms import CloudinaryFileField
 
@@ -21,3 +21,8 @@ class PostForm(forms.ModelForm):
         if commit:
             post.save()
         return post
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['favorite_car', 'current_car', 'profile_picture']
