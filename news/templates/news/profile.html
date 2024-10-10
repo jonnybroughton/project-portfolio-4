@@ -19,5 +19,65 @@
             <p><strong>Comments Left:</strong> {{ user_profile.comment_count }}</p>
         </div>
     </div>
+
+    <!-- Toggle buttons -->
+    <div class="mt-5">
+        <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="posts-tab" data-bs-toggle="tab" href="#posts-section" role="tab" aria-controls="posts-section" aria-selected="true">Posts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="comments-tab" data-bs-toggle="tab" href="#comments-section" role="tab" aria-controls="comments-section" aria-selected="false">Comments</a>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content mt-3">
+            <!-- User Posts Section -->
+            <div class="tab-pane fade show active" id="posts-section" role="tabpanel" aria-labelledby="posts-tab">
+                {% if user_posts %}
+                    <div class="row">
+                        {% for post in user_posts %}
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ post.featured_image.url }}" class="img-fluid rounded-start" alt="Post Image">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ post.title }}</h5>
+                                                <p class="card-text">{{ post.excerpt|truncatewords:25 }}</p>
+                                                <a href="{% url 'post_detail' post.slug %}" class="btn btn-primary" id="view-your-post">View Your Post</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center">You haven't made any posts yet. Maybe it's time to fix that?</p>
+                {% endif %}
+            </div>
+
+            <!-- User Comments Section -->
+            <div class="tab-pane fade" id="comments-section" role="tabpanel" aria-labelledby="comments-tab">
+                {% if user_comments %}
+                    <ul class="list-group">
+                        {% for comment in user_comments %}
+                            <li class="list-group-item">
+                                <p><strong>Commented on:</strong> <a href="{% url 'post_detail' comment.post.slug %}">{{ comment.post.title }}</a></p>
+                                <p>{{ comment.body|truncatewords:25 }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center">You haven't made a comment yet. Don't be shy!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}

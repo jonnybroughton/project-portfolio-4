@@ -153,7 +153,8 @@ button.navbar-toggler{
 }
 
 .btn-signup:hover,
-.btn-signup:active {
+.btn-signup:active,
+.btn-signup:after{
     background-color: #fff;
     color: #FF8800;
 }
@@ -201,6 +202,12 @@ button.navbar-toggler{
     border: none;
 }
 
+#view-your-post:focus,
+#view-your-post:active{
+    color:#fff;
+    background-color: #FF8800;
+}
+
 .faded {
     color: rgb(172, 175, 175);
 }
@@ -227,6 +234,20 @@ button.navbar-toggler{
 }
 
 .edit-post-button{
+    color:#fff;
+    background-color: #FF8800;
+}
+
+#submitButton:after,
+#submitButton:focus{
+    color:#fff;
+    background-color: #FF8800;
+
+}
+
+
+.edit-post-button:focus,
+.edit-post-button::after{
     color:#fff;
     background-color: #FF8800;
 }

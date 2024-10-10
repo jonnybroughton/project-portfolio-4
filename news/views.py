@@ -192,9 +192,13 @@ def vote_post(request, slug):
 def profile_view(request):
     user = request.user
     user_profile = get_object_or_404(UserProfile, user=user)
+    user_posts = Post.objects.filter(author=user, status=1).order_by("-created_on")
+    user_comments = Comment.objects.filter(author=user).order_by("-created_on")
 
     context = {
         'user': user,
         'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_comments': user_comments
     }
     return render(request, 'news/profile.html', context)

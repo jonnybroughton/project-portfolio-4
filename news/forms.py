@@ -23,6 +23,8 @@ class PostForm(forms.ModelForm):
         return post
 
 class UserProfileForm(forms.ModelForm):
+    profile_picture = CloudinaryFileField(required=False) 
+
     class Meta:
         model = UserProfile
         fields = ['favorite_car', 'current_car', 'profile_picture']
