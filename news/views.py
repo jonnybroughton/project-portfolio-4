@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.contrib import messages
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from .models import Post, Comment, Vote, UserProfile
 from .forms import CommentForm, PostForm, UserProfileForm
+
 
 # Create your views here.
 class PostList(generic.ListView):
@@ -17,7 +18,8 @@ class PostList(generic.ListView):
     """
     queryset = Post.objects.all().order_by("-created_on").filter(status=1)
     template_name = "news/index.html"
-    paginate_by = 6 
+    paginate_by = 6
+
 
 def post_detail(request, slug):
     """
@@ -36,7 +38,7 @@ def post_detail(request, slug):
     post = get_object_or_404(queryset, slug=slug)
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.filter(approved=True).count()
-    
+
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -48,7 +50,8 @@ def post_detail(request, slug):
             user_profile.comment_count += 1
             user_profile.save()
             messages.add_message(
-                request, messages.SUCCESS,
+                request,
+                messages.SUCCESS,
                 'Comment submitted and awaiting approval'
             )
 
@@ -81,22 +84,30 @@ def create_post(request):
     :template:`news/create_post.html`
     """
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)  
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user  
+            post.author = request.user
             post.save()
             user_profile = UserProfile.objects.get(user=request.user)
             user_profile.post_count += 1
             user_profile.save()
-            messages.add_message(request, messages.SUCCESS, 'Post created successfully and awaiting approval.')
-            return HttpResponseRedirect(reverse('home'))  
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Post created successfully and awaiting approval.'
+            )
+            return HttpResponseRedirect(reverse('home'))
     else:
         form = PostForm()
 
-    return render(request, 'news/create_post.html', {'form': form})
+    return render(
+        request,
+        'news/create_post.html',
+        {'form': form}
+    )
 
-    
+
 @login_required
 def edit_post(request, slug):
     """
@@ -120,12 +131,22 @@ def edit_post(request, slug):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid() and post.author == request.user:
             form.save()
-            messages.add_message(request, messages.SUCCESS, 'Post updated successfully!')
-            return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Post updated successfully!'
+            )
+            return HttpResponseRedirect(reverse('post_detail',
+                                        args=[post.slug]))
     else:
         form = PostForm(instance=post)
 
-    return render(request, 'news/edit_post.html', {'form': form, 'post': post})
+    return render(
+        request,
+        'news/edit_post.html',
+        {'form': form, 'post': post}
+    )
+
 
 @login_required
 def delete_post(request, slug):
@@ -144,10 +165,15 @@ def delete_post(request, slug):
         if user_profile.post_count > 0:
             user_profile.post_count -= 1
             user_profile.save()
-        messages.add_message(request, messages.SUCCESS, 'Post deleted successfully!')
-        return HttpResponseRedirect(reverse('home'))  
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            'Post deleted successfully!'
+        )
+        return HttpResponseRedirect(reverse('home'))
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
 
 def comment_edit(request, slug, comment_id):
     """
@@ -170,9 +196,11 @@ def comment_edit(request, slug, comment_id):
             comment.save()
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
-            messages.add_message(request, messages.ERROR, 'Error updating comment!')
+            messages.add_message(request,
+                                 messages.ERROR, 'Error updating comment!')
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
 
 def comment_delete(request, slug, comment_id):
     """
@@ -195,9 +223,14 @@ def comment_delete(request, slug, comment_id):
             user_profile.save()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
-        messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
+        messages.add_message(
+            request,
+            messages.ERROR,
+            'You can only delete your own comments!'
+        )
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
 
 @login_required
 def vote_post(request, slug):
@@ -225,6 +258,7 @@ def vote_post(request, slug):
 
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
+
 @login_required
 def profile_view(request):
     """
@@ -247,16 +281,18 @@ def profile_view(request):
     """
     user = request.user
     user_profile = get_object_or_404(UserProfile, user=user)
-    user_posts = Post.objects.filter(author=user, status=1).order_by("-created_on")
+    user_posts = Post.objects.filter(author=user,
+                                     status=1).order_by("-created_on")
     user_comments = Comment.objects.filter(author=user).order_by("-created_on")
 
     context = {
         'user': user,
         'user_profile': user_profile,
         'user_posts': user_posts,
-        'user_comments': user_comments
+        'user_comments': user_comments,
     }
     return render(request, 'news/profile.html', context)
+
 
 @login_required
 def edit_profile(request):
@@ -275,12 +311,17 @@ def edit_profile(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        form = UserProfileForm(request.POST,
+                               request.FILES, instance=user_profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('profile')  
+            return redirect('profile')
     else:
         form = UserProfileForm(instance=user_profile)
 
-    return render(request, 'news/edit_profile.html', {'form': form})
+    return render(
+        request,
+        'news/edit_profile.html',
+        {'form': form}
+    )

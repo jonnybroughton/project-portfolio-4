@@ -347,7 +347,7 @@ button.navbar-toggler{
 
 #update-button:active,
 #update-button:focus{
-    color:fff;
+    color:#fff;
     background-color: #FF8800;
     border-color: #E67300;
     outline: none;

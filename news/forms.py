@@ -6,11 +6,14 @@ from django_summernote.widgets import SummernoteWidget
 # ==============================
 # Form: CommentForm
 # ==============================
+
+
 class CommentForm(forms.ModelForm):
     """Form for submitting comments on posts."""
     class Meta:
         model = Comment
         fields = ('body',)
+
 
 # ==============================
 # Form: PostForm
@@ -30,6 +33,7 @@ class PostForm(forms.ModelForm):
         if commit:
             post.save()
         return post
+
 
 # ==============================
 # Form: UserProfileForm
