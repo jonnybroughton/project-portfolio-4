@@ -202,8 +202,8 @@ button.navbar-toggler{
     border: none;
 }
 
-#view-your-post:focus,
-#view-your-post:active{
+.view-your-post:focus,
+.view-your-post:active{
     color:#fff;
     background-color: #FF8800;
 }
@@ -328,9 +328,9 @@ button.navbar-toggler{
     border-color: #FF8800;
 }
 
-#comment-link{
-    color: red !important; 
-    text-decoration: none !important;
+.commented-post-link {
+   color: red,!important;
+   text-decoration: none, !important;
 }
 
 .edit-profile{

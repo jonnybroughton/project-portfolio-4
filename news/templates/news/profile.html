@@ -62,7 +62,7 @@
                                                 </p> 
 
                                                 <!-- View Post Button -->
-                                                <a href="{% url 'post_detail' post.slug %}" class="btn btn-primary" id="view-your-post">View Your Post</a>
+                                                <a href="{% url 'post_detail' post.slug %}" class="btn btn-primary view-your-post">View Your Post</a>
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +82,7 @@
                         {% for comment in user_comments %}
                             <li class="list-group-item">
                                 <!-- Commented Post Information -->
-                                <p><strong>Commented on:</strong> <a href="{% url 'post_detail' comment.post.slug %}" id="comment-link">{{ comment.post.title }}</a></p>
+                                <p><strong>Commented on:</strong> <a href="{% url 'post_detail' comment.post.slug %}" style="color:red; text-decoration: none;" class="commented-post-link">{{ comment.post.title }}</a></p>
                                 <p>{{ comment.body|truncatewords:25 }}</p>
                             </li>
                         {% endfor %}
