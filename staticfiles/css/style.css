@@ -1,15 +1,14 @@
 body {
     background-color: #F9FAFC;
     font-family: 'Open Sans', sans-serif;
-}
 
-/* ==================== Navbar Styles ==================== */
+}
 .navbar {
     background-color: #FF8800; 
     margin-bottom: 2rem;
 }
 
-.navbar-logo {
+.navbar-logo{
     max-width: 130px; 
     max-height: 130px;
     width: auto;
@@ -21,25 +20,25 @@ body {
     border-color: #fff;     
 }
 
-button.navbar-toggler {
-    color: #fff;
+button.navbar-toggler{
+    color:#fff;
 }
 
 .navbar-toggler-icon {
-    color: #fff;
+    color:#fff;
 }
 
-.nav-link {
-    color: #fff;
+.nav-link{
+    color:#fff;
 }
 
-.nav-link:visited {
-    color: #fff;
+.nav-link:visited{
+    color:#fff;
 }
 
-.navbar-brand {
+.navbar-brand{
     max-height: 100px;
-    max-width: 100px;
+    max-width:100px;
     margin-right: 40px;
     margin-top: -30px;
 }
@@ -61,7 +60,6 @@ button.navbar-toggler {
     background-color: transparent;
 }
 
-/* ==================== Image Styles ==================== */
 .image-container {
     position: relative;
     width: 100%; 
@@ -69,7 +67,7 @@ button.navbar-toggler {
     overflow: hidden;
 }
 
-.image-container img {
+.image-container img{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -80,7 +78,12 @@ button.navbar-toggler {
     bottom: 5%;
     min-width: 30%;
     left: -2px;
-    background-color: #FF8800;
+    background-color:#FF8800;
+}
+
+.scale {
+    width: 100%;
+    height: auto;
 }
 
 .author {
@@ -89,13 +92,12 @@ button.navbar-toggler {
     text-transform: uppercase;
 }
 
-/* ==================== Masthead Styles ==================== */
 .masthead {
     margin-top: 10px;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     display: inline-block;
-    height: 33vh;
+    height: auto;
     width: 100%;
 }
 
@@ -124,7 +126,6 @@ button.navbar-toggler {
     z-index: 100;
 }
 
-/* ==================== Post Link Styles ==================== */
 .post-link {
     text-decoration: none;
     color: #445261;
@@ -135,7 +136,6 @@ button.navbar-toggler {
     color: #E84610;
 }
 
-/* ==================== Post Title and Subtitle Styles ==================== */
 .post-title {
     margin-top: 10%;
     margin-left: 5%;
@@ -146,28 +146,29 @@ button.navbar-toggler {
     color: lightgray;
 }
 
-/* ==================== Button Styles ==================== */
 .btn-signup,
 .btn-edit {
-    background-color: #FF8800;
+    background-color:#FF8800;
     color: #fff;
 }
 
 .btn-signup:hover,
-.btn-signup:active {
+.btn-signup:active,
+.btn-signup:after{
     background-color: #fff;
     color: #FF8800;
 }
 
-.btn-primary { 
-    color: #fff;
+.btn-primary{ 
+    color:#fff;
     background-color: #FF8800;
     border-color: #FF8800;
 }
 
+
 .btn-primary:hover,
 .btn-primary:active { 
-    color: #fff;
+    color:#fff;
     background-color: #FF8800;
     border-color: #FF8800;
 }
@@ -201,6 +202,12 @@ button.navbar-toggler {
     border: none;
 }
 
+#view-your-post:focus,
+#view-your-post:active{
+    color:#fff;
+    background-color: #FF8800;
+}
+
 .faded {
     color: rgb(172, 175, 175);
 }
@@ -209,31 +216,58 @@ button.navbar-toggler {
     color: rgb(222, 146, 168);
 }
 
-.social-link {
+.social-link{
     text-decoration: none;
-    color: #fff;
+    color:#fff;
 }
 
 .social-link:visited {
-    color: #fff;
+    color:#fff;
 }
 
-.create-post {
+.create-post{
     padding-bottom: 20px;
 }
 
+.create-post-submit {
+    color: #fff; 
+    background-color: #FF8800; 
+    border: none; 
+    transition: background-color 0.3s ease;
+}
 
-.edit-delete {
+.create-post-submit:hover,
+.create-post-submit:focus {
+    background-color: #E67300;
+    color: #fff;
+    outline: none; 
+}
+
+.edit-delete{
     padding-left: 20px;
 }
 
-.edit-post-button {
-    color: #fff;
+.edit-post-button{
+    color:#fff;
     background-color: #FF8800;
 }
 
-/* ==================== Update Button Styles ==================== */
-#update-button {
+#submitButton:after,
+#submitButton:focus{
+    color:#fff;
+    background-color: #FF8800;
+
+}
+
+
+.edit-post-button:focus,
+.edit-post-button::after,
+.edit-post-button:hover{
+    color:#fff;
+    background-color:#E67300;
+}
+
+#update-button{
     background-color: #FF8800;
     color: #fff;
     border-color: #FF8800;
@@ -254,6 +288,67 @@ button.navbar-toggler {
     box-shadow: none;
 }
 
-.cancel-edit {
+.cancel-edit{
     margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-left: 40px;
+    margin-top: 20px;
+    padding-right: 10px;
+    
+}
+
+.profile-post-image{
+    width: 100%;  
+    height: 200px;
+    object-fit: cover; 
+}
+
+.nav-tabs .nav-link {
+    color: #445261;
+    background-color: #F9FAFC;
+    border: 1px solid #ddd;  
+    margin-right: 5px; 
+    padding: 10px 20px; 
+    transition: background-color 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    background-color: #FF8800;
+    color: #fff;
+}
+
+.nav-tabs .nav-link.active {
+    color: #fff;  
+    background-color: #FF8800;
+    border-color: #FF8800;
+}
+
+#comment-link{
+    color: red !important; 
+    text-decoration: none !important;
+}
+
+.edit-profile{
+    color:#fff;
+    background-color: #FF8800;
+    border:none;
+}
+
+.edit-profile:hover,
+.editprofile:after{
+    color:#fff;
+    background-color: #FF8800;
+}
+
+#update-button:active,
+#update-button:focus{
+    color:fff;
+    background-color: #FF8800;
+    border-color: #E67300;
+    outline: none;
 }
