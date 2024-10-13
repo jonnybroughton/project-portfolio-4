@@ -5,9 +5,14 @@ from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 import re
 
+# Define the status choices for posts
 STATUS = ((0, "Draft"), (1, "Published"))
 
+# ==============================
+# Model: Post
+# ==============================
 class Post(models.Model):
+    """Model representing a blog post."""
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(max_length=150, unique=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="news_posts")
@@ -34,13 +39,10 @@ class Post(models.Model):
         return self.total_upvotes() - self.total_downvotes()
 
     def save(self, *args, **kwargs):
+        """Override save method to generate a unique slug."""
         if not self.slug:
             slug = slugify(self.title)
-
-            # Remove colons and replace with hyphens
             slug = slug.replace(':', '-')
-
-            # Remove any invalid characters and replace them with hyphens
             slug = re.sub(r'[^a-zA-Z0-9_-]', '-', slug)
 
             unique_slug = slug
@@ -52,24 +54,31 @@ class Post(models.Model):
             self.slug = unique_slug
         super().save(*args, **kwargs)
 
+# ==============================
+# Model: Vote
+# ==============================
 class Vote(models.Model):
+    """Model representing a vote on a post."""
     VOTE_CHOICES = (
         (1, 'Upvote'),
         (-1, 'Downvote'),
     )
-    
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_votes')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='votes')
-    value = models.IntegerField(choices=VOTE_CHOICES, null=False)  
+    value = models.IntegerField(choices=VOTE_CHOICES, null=False)
 
     class Meta:
-        unique_together = ('user', 'post') 
+        unique_together = ('user', 'post')
 
     def __str__(self):
         return f"{self.user.username} voted {self.value} on {self.post.title}"
-    
 
+# ==============================
+# Model: Comment
+# ==============================
 class Comment(models.Model):
+    """Model representing a comment on a post."""
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
     body = models.TextField()
@@ -82,11 +91,15 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment {self.body} by {self.author}"
 
+# ==============================
+# Model: UserProfile
+# ==============================
 class UserProfile(models.Model):
+    """Model representing a user's profile."""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favorite_car = models.CharField(max_length=100)
     current_car = models.CharField(max_length=100)
-    post_count = models.PositiveIntegerField(default=0)  
+    post_count = models.PositiveIntegerField(default=0)
     comment_count = models.PositiveIntegerField(default=0)
     profile_picture = CloudinaryField('image', null=True, blank=True)
 

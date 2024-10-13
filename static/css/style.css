@@ -229,10 +229,18 @@ button.navbar-toggler{
     padding-bottom: 20px;
 }
 
-.create-post-submit:active,
-.create-post-submit::after{
-    color: #fff;
+.create-post-submit {
+    color: #fff; 
+    background-color: #FF8800; 
+    border: none; 
+    transition: background-color 0.3s ease;
+}
+
+.create-post-submit:hover,
+.create-post-submit:focus {
     background-color: #E67300;
+    color: #fff;
+    outline: none; 
 }
 
 .edit-delete{

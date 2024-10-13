@@ -1,7 +1,8 @@
 from . import views
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
+    path('django_summernote/', include('django_summernote.urls')),
     path('', views.PostList.as_view(), name='home'),
     path('create/', views.create_post, name='create_post'),
     path('post/edit/<slug:slug>/', views.edit_post, name='edit_post'),

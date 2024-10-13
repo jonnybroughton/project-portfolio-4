@@ -1,13 +1,31 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
+<!-- Styles and Scripts for Summernote -->
+<link href="{% static 'django_summernote/summernote.css' %}" rel="stylesheet">
+<script src="{% static 'django_summernote/summernote.js' %}"></script>
+
 <div class="container create-post">
     <h2>Create a New Post</h2>
+    
+    <!-- Post Creation Form -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form|crispy }}  
+        {{ form|crispy }}
+        
+        <!-- Submit Button -->
         <button type="submit" class="btn btn-primary create-post-submit">Submit</button>
     </form>
 </div>
+
+<!-- Initialize Summernote -->
+<script>
+    $(document).ready(function() {
+        $('#id_content').summernote({
+            height: 300,
+        });
+    });
+</script>
 {% endblock %}

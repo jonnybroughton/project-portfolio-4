@@ -6,10 +6,15 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Comment, Vote, UserProfile
 from .forms import CommentForm, PostForm, UserProfileForm
 
-
-
 # Create your views here.
 class PostList(generic.ListView):
+    """
+    View to list all posts.
+
+    **Template:**
+
+    :template:`news/index.html`
+    """
     queryset = Post.objects.all().order_by("-created_on").filter(status=1)
     template_name = "news/index.html"
     paginate_by = 6 
@@ -27,11 +32,11 @@ def post_detail(request, slug):
 
     :template:`news/post_detail.html`
     """
-
     queryset = Post.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.filter(approved=True).count()
+    
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -63,6 +68,18 @@ def post_detail(request, slug):
 
 @login_required
 def create_post(request):
+    """
+    View to create a new post.
+
+    **Context**
+
+    ``form``
+        An instance of :form:`PostForm`.
+
+    **Template:**
+
+    :template:`news/create_post.html`
+    """
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)  
         if form.is_valid():
@@ -83,7 +100,19 @@ def create_post(request):
 @login_required
 def edit_post(request, slug):
     """
-    View to edit a post
+    View to edit a post.
+
+    **Context**
+
+    ``form``
+        An instance of :form:`PostForm`.
+
+    ``post``
+        The post instance being edited.
+
+    **Template:**
+
+    :template:`news/edit_post.html`
     """
     post = get_object_or_404(Post, slug=slug)
 
@@ -101,7 +130,11 @@ def edit_post(request, slug):
 @login_required
 def delete_post(request, slug):
     """
-    View to delete a post
+    View to delete a post.
+
+    **Template:**
+
+    Redirects to home if the post is deleted.
     """
     post = get_object_or_404(Post, slug=slug)
 
@@ -113,13 +146,16 @@ def delete_post(request, slug):
             user_profile.save()
         messages.add_message(request, messages.SUCCESS, 'Post deleted successfully!')
         return HttpResponseRedirect(reverse('home'))  
-    
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 def comment_edit(request, slug, comment_id):
     """
-    view to edit comments
+    View to edit a comment.
+
+    **Template:**
+
+    Redirects to the post detail view after editing.
     """
     if request.method == "POST":
         queryset = Post.objects.filter(status=1)
@@ -139,10 +175,14 @@ def comment_edit(request, slug, comment_id):
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 def comment_delete(request, slug, comment_id):
+    """
+    View to delete a comment.
+
+    **Template:**
+
+    Redirects to the post detail view after deletion.
+    """
     print(f"Attempting to delete comment with ID {comment_id}")
-    """
-    view to delete comment
-    """
     queryset = Post.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
     comment = get_object_or_404(Comment, pk=comment_id)
@@ -161,23 +201,21 @@ def comment_delete(request, slug, comment_id):
 
 @login_required
 def vote_post(request, slug):
-    # To run through this code when the user submits a vote
+    """
+    View to vote on a post.
+
+    **Template:**
+
+    Redirects to the post detail view after voting.
+    """
     if request.method == 'POST':
-
-        # gets the user
         user = request.user
-
-        # gets the current post
         post = get_object_or_404(Post, slug=slug)
-
-        # filters the votes for the current post
         vote = post.votes.filter(user=user).first()
 
         if vote is not None:
-            # if the vote already exists delete the vote
             vote.delete()
         else:
-            # apply the submitted data to the Vote model
             vote = Vote()
             vote.user = request.user
             vote.post = post
@@ -185,11 +223,28 @@ def vote_post(request, slug):
             vote.save()
             print('VOTE: ', vote)
 
-        # return to the post_detail page
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 @login_required
 def profile_view(request):
+    """
+    View to display the user's profile.
+
+    **Context**
+
+    ``user_profile``
+        An instance of :model:`UserProfile`.
+
+    ``user_posts``
+        A list of posts authored by the user.
+
+    ``user_comments``
+        A list of comments authored by the user.
+
+    **Template:**
+
+    :template:`news/profile.html`
+    """
     user = request.user
     user_profile = get_object_or_404(UserProfile, user=user)
     user_posts = Post.objects.filter(author=user, status=1).order_by("-created_on")
@@ -205,6 +260,18 @@ def profile_view(request):
 
 @login_required
 def edit_profile(request):
+    """
+    View to edit the user's profile.
+
+    **Context**
+
+    ``form``
+        An instance of :form:`UserProfileForm`.
+
+    **Template:**
+
+    :template:`news/edit_profile.html`
+    """
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'POST':

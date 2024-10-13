@@ -3,13 +3,32 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<!-- Styles and Scripts for Summernote -->
+<link href="{% static 'django_summernote/summernote.css' %}" rel="stylesheet">
+<script src="{% static 'django_summernote/summernote.js' %}"></script>
+
 <div class="container">
     <h2>Edit Post</h2>
+    
+    <!-- Post Edit Form -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
+        
+        <!-- Update Post Button -->
         <button type="submit" class="btn btn-success" id="update-button">Update Post</button>
     </form>
+    
+    <!-- Cancel Edit Button -->
     <a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary cancel-edit">Cancel</a>
 </div>
+
+<!-- Initialize Summernote -->
+<script>
+    $(document).ready(function() {
+        $('#id_content').summernote({
+            height: 300,
+        });
+    });
+</script>
 {% endblock content %}
