@@ -2,14 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from cloudinary.models import CloudinaryField
-
-# Create your models here.
+from django.utils.text import slugify
+import re
 
 STATUS = ((0, "Draft"), (1, "Published"))
 
 class Post(models.Model):
     title = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField(max_length=150, unique=True)
+    slug = models.SlugField(max_length=150, unique=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="news_posts")
     featured_image = CloudinaryField('image', default='placeholder')
     content = models.TextField()
@@ -17,7 +17,6 @@ class Post(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS, default=0)
     excerpt = models.TextField(blank=True)
-
 
     class Meta:
         ordering = ["-created_on"]
@@ -33,6 +32,25 @@ class Post(models.Model):
 
     def total_votes(self):
         return self.total_upvotes() - self.total_downvotes()
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = slugify(self.title)
+
+            # Remove colons and replace with hyphens
+            slug = slug.replace(':', '-')
+
+            # Remove any invalid characters and replace them with hyphens
+            slug = re.sub(r'[^a-zA-Z0-9_-]', '-', slug)
+
+            unique_slug = slug
+            num = 1
+            while Post.objects.filter(slug=unique_slug).exists():
+                unique_slug = f'{slug}-{num}'
+                num += 1
+
+            self.slug = unique_slug
+        super().save(*args, **kwargs)
 
 class Vote(models.Model):
     VOTE_CHOICES = (

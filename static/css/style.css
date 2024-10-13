@@ -94,10 +94,10 @@ button.navbar-toggler{
 
 .masthead {
     margin-top: 10px;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     display: inline-block;
-    height: 33vh;
+    height: auto;
     width: 100%;
 }
 
@@ -229,6 +229,12 @@ button.navbar-toggler{
     padding-bottom: 20px;
 }
 
+.create-post-submit:active,
+.create-post-submit::after{
+    color: #fff;
+    background-color: #E67300;
+}
+
 .edit-delete{
     padding-left: 20px;
 }
@@ -247,9 +253,10 @@ button.navbar-toggler{
 
 
 .edit-post-button:focus,
-.edit-post-button::after{
+.edit-post-button::after,
+.edit-post-button:hover{
     color:#fff;
-    background-color: #FF8800;
+    background-color:#E67300;
 }
 
 #update-button{
@@ -277,3 +284,63 @@ button.navbar-toggler{
     margin-bottom: 20px;
 }
 
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-left: 40px;
+    margin-top: 20px;
+    padding-right: 10px;
+    
+}
+
+.profile-post-image{
+    width: 100%;  
+    height: 200px;
+    object-fit: cover; 
+}
+
+.nav-tabs .nav-link {
+    color: #445261;
+    background-color: #F9FAFC;
+    border: 1px solid #ddd;  
+    margin-right: 5px; 
+    padding: 10px 20px; 
+    transition: background-color 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    background-color: #FF8800;
+    color: #fff;
+}
+
+.nav-tabs .nav-link.active {
+    color: #fff;  
+    background-color: #FF8800;
+    border-color: #FF8800;
+}
+
+#comment-link{
+    color: red !important; 
+    text-decoration: none !important;
+}
+
+.edit-profile{
+    color:#fff;
+    background-color: #FF8800;
+    border:none;
+}
+
+.edit-profile:hover,
+.editprofile:after{
+    color:#fff;
+    background-color: #FF8800;
+}
+
+#update-button:active,
+#update-button:focus{
+    color:fff;
+    background-color: #FF8800;
+    border-color: #E67300;
+    outline: none;
+}

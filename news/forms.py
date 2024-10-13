@@ -17,7 +17,6 @@ class PostForm(forms.ModelForm):
 
     def save(self, commit=True):
         post = super().save(commit=False)
-        post.slug = '-'.join(post.title.lower().split())
         if commit:
             post.save()
         return post

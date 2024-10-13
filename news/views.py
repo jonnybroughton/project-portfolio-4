@@ -202,3 +202,18 @@ def profile_view(request):
         'user_comments': user_comments
     }
     return render(request, 'news/profile.html', context)
+
+@login_required
+def edit_profile(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')  
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'news/edit_profile.html', {'form': form})

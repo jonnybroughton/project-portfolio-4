@@ -2,25 +2,30 @@
 {% load static %}
 {% block content %}
 <div class="container mt-5">
+    <!-- Profile Header -->
     <h2>{{ user_profile.user.username }}'s Profile</h2>
     <div class="row">
         <div class="col-md-4">
+            <!-- Profile Picture Section -->
             {% if user_profile.profile_picture %}
-                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid">
+                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid profile-picture">
             {% else %}
-                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="img-fluid">
+                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="img-fluid profile-picture">
             {% endif %}
         </div>
         <div class="col-md-8">
+            <!-- User Info Section -->
             <h3>About Me:</h3>
             <p><strong>Favorite Car:</strong> {{ user_profile.favorite_car }}</p>
             <p><strong>Current Car:</strong> {{ user_profile.current_car }}</p>
             <p><strong>Posts Created:</strong> {{ user_profile.post_count }}</p>
             <p><strong>Comments Left:</strong> {{ user_profile.comment_count }}</p>
+            <!-- Edit Profile Button -->
+            <a href="{% url 'edit_profile' %}" class="btn btn-secondary mt-3 edit-profile">Edit Profile</a>
         </div>
     </div>
 
-    <!-- Toggle buttons -->
+    <!-- Toggle Buttons for Tabs -->
     <div class="mt-5">
         <ul class="nav nav-tabs" id="profileTabs" role="tablist">
             <li class="nav-item">
@@ -31,7 +36,7 @@
             </li>
         </ul>
 
-        <!-- Tab content -->
+        <!-- Tab Content -->
         <div class="tab-content mt-3">
             <!-- User Posts Section -->
             <div class="tab-pane fade show active" id="posts-section" role="tabpanel" aria-labelledby="posts-tab">
@@ -42,12 +47,21 @@
                                 <div class="card">
                                     <div class="row g-0">
                                         <div class="col-md-4">
-                                            <img src="{{ post.featured_image.url }}" class="img-fluid rounded-start" alt="Post Image">
+                                            <!-- Post Image -->
+                                            <img src="{{ post.featured_image.url }}" class="img-fluid rounded-start profile-post-image" alt="Post Image">
                                         </div>
                                         <div class="col-md-8">
                                             <div class="card-body">
+                                                <!-- Post Title and Excerpt -->
                                                 <h5 class="card-title">{{ post.title }}</h5>
                                                 <p class="card-text">{{ post.excerpt|truncatewords:25 }}</p>
+                                                
+                                                <!-- Total Votes Information -->
+                                                <p class="card-text">
+                                                    <strong>Total Votes:</strong> {{ post.total_votes }}
+                                                </p> 
+
+                                                <!-- View Post Button -->
                                                 <a href="{% url 'post_detail' post.slug %}" class="btn btn-primary" id="view-your-post">View Your Post</a>
                                             </div>
                                         </div>
@@ -67,7 +81,8 @@
                     <ul class="list-group">
                         {% for comment in user_comments %}
                             <li class="list-group-item">
-                                <p><strong>Commented on:</strong> <a href="{% url 'post_detail' comment.post.slug %}">{{ comment.post.title }}</a></p>
+                                <!-- Commented Post Information -->
+                                <p><strong>Commented on:</strong> <a href="{% url 'post_detail' comment.post.slug %}" id="comment-link">{{ comment.post.title }}</a></p>
                                 <p>{{ comment.body|truncatewords:25 }}</p>
                             </li>
                         {% endfor %}
@@ -79,5 +94,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
