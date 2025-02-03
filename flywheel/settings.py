@@ -30,7 +30,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['8000-jonnybrough-projectport-yai4j3vtgl8.ws.codeinstitute-ide.net', '8000-jonnybrough-projectport-f2ldo52n2wu.ws.codeinstitute-ide.net', '.herokuapp.com']
 

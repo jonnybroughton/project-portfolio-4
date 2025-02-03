@@ -112,6 +112,158 @@ This feature would be a rather big change, and comes as a suggested alternative 
 
 In order to ensure quality code and minimise errors, I have done a range of testing to different aspects of the site.
 
+
+### Manual Testing
+
+<table>
+<tr>
+<th>Test Name</th>
+<th>Steps</th>
+<th>Expected Result</th>
+<th>Outcome</th>
+<th>Pass/Fail</th>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Logo Button</td>
+<td>Click the Logo of the website in the top left hand of the screen</td>
+<td>The user is returned to the index page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Home Button</td>
+<td>Click the Home button in the Navbar</td>
+<td>The user is returned to the index page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Registration Button</td>
+<td>Click the Register button</td>
+<td>The user is brought to the Register/Signup page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Login Button</td>
+<td>Click on the Login button in the Navbar</td>
+<td>The user is brought to the Login page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Login Button</td>
+<td>Click on the Login button in the Navbar</td>
+<td>The user is brought to the Login page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Sign In redirection button</td>
+<td>On the registation, click on the orange text directing users who already have an acccount to log in instead</td>
+<td>Users are redirected to the Log in page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<td>Sign Up Button</td>
+<td>On the registration page, click the Sign Up button</td>
+<td>When you have created credentials for your account, click the Sign Up button and be brought to the index page with a message that you have signed in</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Sign in In Button</td>
+<td>On the Log In page, click the Sign In button</td>
+<td>When you have entered credentials for your account, click the Sign In button and be brought to the index page with a message that you have signed in</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Post Title Button</td>
+<td>Click on the title of the post you want to view</td>
+<td>You are taken to the Post detail page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Submit Comment Button</td>
+<td>Once you have filled out a comment, you can click submit to send it for approval</td>
+<td>When the button is clicked, the comment is added to the list of comments, but greyed out with a message telling the user their comment is waiting to be submitted for approval by admins. Users are provided two more buttons to edit their comment or delete it</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Upvote/Downvote Buttons</td>
+<td>On the Post detail page, click on either upvote/downvote buttons</td>
+<td>An upvote will add a number to the overall count of votes. Clicking the downvote button will take away a number from the overall count of votes</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Edit Comment Button</td>
+<td>Click edit to edit the comment you've made</td>
+<td>The user's comment is sent back into the comment body field to edit their comment, and then resubmit it</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Delete comment button</td>
+<td>Click the delete button on your comment, and then delete on the confirmation warning to delete the comment</td>
+<td>When the button is clicked, users are shown a message asking them to press the delete button once more within the message to ensure they are okay with their action</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Create Post button</td>
+<td>Click create post to fill out the post creation form</td>
+<td>Users can click this button and then fill out the form for their post, and include an image from their computer to accompany their post if they so wish. When submitted, they are returned to the index page with a message informing them their post will appear when an admin approves it.</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Edit Post button</td>
+<td>If the user is the author of the post, they can click the edit post button to be brought back to the post creation form and make changes</td>
+<td>The user is taken to the form where they can update the form for the post, without the need to resend the post to the admins</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Delete post button</td>
+<td>If the user is the author of the post, they are given the option to delete the post.</td>
+<td>The user is asked one more time in a popup message if they're sure they want to delete it, and if so, the post is then deleted from the list of posts on the index page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>My Profile Button</td>
+<td>Click the My Profile button in the navbar once logged in    </td>
+<td>The user is brought to their Profile page</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Post/Comment history tabs</td>
+<td>Users can see their previous posts and comments at the bottom of the profile page by clicking on each tab</td>
+<td>The list of the latest posts and comments made by the user can be viewed by looking at either tab, and within these lists, they can see either the post detail page of posts they have made, or the post where they have left their comment</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Edit Profile button</td>
+<td>When on the the profile page, users can click the edit profile button to fill out a short form which will be displayed on their profile page</td>
+<td>Users are able to fill out their profile form with their favourite car, current car, and a profile picture if they choose</td>
+<td>[Expected outcome achieved]</td>
+<td>Pass</td>
+</tr>
+</tr>
+</table>
+
 ### Validator Testing
 
 I used four seperate validators to check for issues accross each language used in the project.
