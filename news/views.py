@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from .models import Post, Comment, Vote, UserProfile
 from .forms import CommentForm, PostForm, UserProfileForm
@@ -107,37 +109,29 @@ def create_post(request):
         {'form': form}
     )
 
+def custom_403(request, exception):
+    context = {'message': str(exception)}
+    return render(request, 'news/templates/news/permission_denied.html', context, status=403)
+
+
 
 @login_required
 def edit_post(request, slug):
-    """
-    View to edit a post.
-
-    **Context**
-
-    ``form``
-        An instance of :form:`PostForm`.
-
-    ``post``
-        The post instance being edited.
-
-    **Template:**
-
-    :template:`news/edit_post.html`
-    """
     post = get_object_or_404(Post, slug=slug)
-
+    
+    if post.author != request.user:
+        raise PermissionDenied("You are not authorized to edit this post.")
+    
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES, instance=post)
-        if form.is_valid() and post.author == request.user:
+        if form.is_valid():
             form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 'Post updated successfully!'
             )
-            return HttpResponseRedirect(reverse('post_detail',
-                                        args=[post.slug]))
+            return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
     else:
         form = PostForm(instance=post)
 
@@ -146,6 +140,7 @@ def edit_post(request, slug):
         'news/edit_post.html',
         {'form': form, 'post': post}
     )
+
 
 
 @login_required
